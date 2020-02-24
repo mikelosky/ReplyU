@@ -20,7 +20,6 @@ class Esamination:
 
 
 
-
 if __name__ == "__main__":
     map = pd.read_csv("./Maps/0_exsample.txt", header=None)
     contraint = pd.read_csv("./Maps/constraint.txt", header=None)
