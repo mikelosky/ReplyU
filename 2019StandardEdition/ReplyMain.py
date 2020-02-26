@@ -5,7 +5,7 @@ import pandas as pd
 
 
 class Esamination:
-    def __init__(self, map, constraint):
+    def __init__(self, map, justmap, constraint):
         info = map.iloc[0, 0].split()
         self.infoCustomerOffices = []
         self.map = []
@@ -25,7 +25,7 @@ class Esamination:
             # start = [int(self.infoCustomerOffices[j][0]), int(self.infoCustomerOffices[j][1])]
             # goal = [int(self.infoCustomerOffices[j + 1][0]), int(self.infoCustomerOffices[j + 1][1])]
             Astar(self.constraint, self.map, tuple(start), tuple(goal), int(mapsizey) - 1, int(mapsizex) - 1)
-        pp.pprint(map)
+        pp.pprint(justmap)
 
 
 class Astar:
@@ -99,5 +99,6 @@ class Astar:
 
 if __name__ == "__main__":
     map = pd.read_csv("./Maps/0_exsample.txt", header=None)
+    justmap = pd.read_csv("./Maps/exsamplejustmap.txt", header=None)
     contraint = pd.read_csv("./Maps/constraint.txt", header=None)
-    Esamination(map, contraint)
+    Esamination(map, justmap, contraint)
