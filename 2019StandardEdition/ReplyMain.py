@@ -51,6 +51,8 @@ class Astar:
 
         visited = set()
         while pr_queue:
+            #TODO: Azzerare il costo per ogni percorso
+            #TODO: Fare il bruteforce per vedere quali punti ti prende
             _, cost, costwalktot, path, current = heappop(pr_queue)
             if current == goal:
                 return path
