@@ -43,9 +43,29 @@ class Esamination:
                             self.prinntnm2[o][0] = self.prinntnm2[o][0] + prinntnm1[o][t]
 
                     pp.pprint(self.prinntnm2)
-        #TODO:trovare il path comune
+
+        self.last = self.findcomunpath(self.pathxy)
+        self.placeoffice(self.last, self.map, int(mapsizey) - 1, int(mapsizex) - 1, self.constraint, self.infoCustomerOffices, graf)
         pp.pprint(self.paths)
         pp.pprint(justmap)
+
+    def placeoffice(self, last, map, mapsizey, mapsizex, constraint, infoCustomerOffices, graf):
+        total = 0
+        Astars = Astar()
+        pathsoffice =[]
+        for i in infoCustomerOffices:
+            total = total + int(i[2])
+
+        for lastest in last:
+            office = lastest[0]
+            for const in infoCustomerOffices:
+                costumer = [int(const[1]), int(const[0])]
+                graf = Astar.createListAdjancet(Astars, map, int(mapsizey) - 1, int(mapsizex) - 1, constraint)
+                info = Astar.Astar(Astars, tuple(office), tuple(costumer), graf)
+                costpath = int(const[3]) - int(info[1])
+
+                pathsoffice.append(info)
+                print(lastest)
 
     def convxy(self, info, star, goal):
         startx = star[0]
@@ -72,6 +92,31 @@ class Esamination:
             maph[k[0]][k[1]] = '$'
         return maph
 
+    def findcomunpath(self, xypath):
+        ret = []
+        last = []
+        temp = []
+        for i in xypath:
+            starti = i[0]
+            goali = i[-1]
+            pathchechi = i[2:-2]
+            for y in xypath:
+                starty = y[0]
+                goaly = y[-1]
+                pathchechy = y[2:-2]
+                if (starti != starty or goali != goaly) and (starti != goaly or goali != starty):
+                    if any(elem in pathchechi for elem in pathchechy):
+                        for j in pathchechi:
+                            for k in pathchechy:
+                                if j == k:
+                                    ret.append(j)
+        for tupl in ret:
+            if (tupl in temp) != True:
+                num = ret.count(tupl)
+                last.append([tupl, num])
+                temp.append(tupl)
+        return last
+
 
 class Astar:
     def heuristic(self, cell, goal):
@@ -91,8 +136,8 @@ class Astar:
 
         visited = set()
         while pr_queue:
-            #TODO: Azzerare il costo per ogni percorso
-            #TODO: Fare il bruteforce per vedere quali punti ti prende
+            # TODO: Azzerare il costo per ogni percorso
+            # TODO: Fare il bruteforce per vedere quali punti ti prende
             _, cost, costwalktot, path, current = heappop(pr_queue)
             if current == goal:
                 info = [costwalktot, path]
